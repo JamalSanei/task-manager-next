@@ -8,6 +8,7 @@ export default function TaskForm() {
 
   async function handleSubmit(formData: FormData) {
     await addTask(formData);
+    ref.current?.reset();
   }
 
   return (

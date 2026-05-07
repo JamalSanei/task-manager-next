@@ -1,10 +1,17 @@
 import TaskForm from "@/components/taskFrom";
 
-export default async function TasksPage() {
+async function getTasks() {
   const res = await fetch(
     "https://jsonplaceholder.typicode.com/todos?_limit=5",
+    { next: { revalidate: 60 } },
   );
-  const tasks = await res.json();
+  console.log("fetch getTasks....");
+  return res.json();
+}
+
+export default async function TasksPage() {
+  const tasks = await getTasks();
+
   return (
     <main className="max-w-lg mx-auto py-8 px-4">
       <h1 className="text-2xl font-bold">Tasks</h1>
