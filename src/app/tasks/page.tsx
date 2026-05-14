@@ -1,20 +1,15 @@
 import TaskForm from "@/components/taskFrom";
-
-interface Task {
-  id: number;
-  title: string;
-  completed: boolean;
-}
+import { db } from "../../../prisma/prisma.client";
+import { Task } from "@/generated/prisma/client";
 
 async function getTasks() {
   await new Promise((resolve) => setTimeout(resolve, 1000)); // dummy delay for testing loading state
-  const res = await fetch(
-    "https://jsonplaceholder.typicode.com/todos?_limit=5",
-  );
-  if (res.ok) throw new Error("Test error... not Attention"); // dummy error for testing error page
 
-  if (!res.ok) throw new Error("Failed to fetch data");
-  return res.json();
+  const res = await db.task.findMany({ take: 5 });
+  // if (res) throw new Error("Test error... not Attention"); // dummy error for testing error page
+
+  if (!res) throw new Error("Failed to fetch data");
+  return res;
 }
 export default async function TasksPage() {
   const tasks: Task[] = await getTasks();
